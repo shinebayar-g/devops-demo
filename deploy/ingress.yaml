@@ -1,0 +1,25 @@
+kind: Ingress
+apiVersion: networking.k8s.io/v1beta1
+metadata:
+  name: flask-app
+  namespace: shinebayar-g
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "180"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "180"
+    dev.okteto.com/auto-ingress: "true"
+  labels:
+    app: flask-app
+    team: alpha-1
+spec:
+  rules:
+    - host: flask-app-shinebayar-g.cloud.okteto.net
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: flask-app
+              servicePort: 5000
+  tls:
+    - hosts:
+        - flask-app-shinebayar-g.cloud.okteto.net

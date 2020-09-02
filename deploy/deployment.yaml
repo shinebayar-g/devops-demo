@@ -1,0 +1,53 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: flask-app
+  namespace: shinebayar-g
+  labels:
+    app: flask-app
+    team: alpha-1
+spec:
+  selector:
+    matchLabels:
+      app: flask-app
+      team: alpha-1
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  progressDeadlineSeconds: 600
+  template:
+    metadata:
+      labels:
+        app: flask-app
+        team: alpha-1
+    spec:
+      terminationGracePeriodSeconds: 300
+      containers:
+        - name: flask-app
+          image: shinebayar/devops-demo-flask:master
+          imagePullPolicy: Always
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 3
+          env:
+            - name: AWESOME
+              value: "TRUE"
+          ports:
+            - name: http
+              containerPort: 5000
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 100m
+              memory: 256Mi

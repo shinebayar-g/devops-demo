@@ -1,0 +1,17 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: flask-app
+  namespace: shinebayar-g
+  labels:
+    app: flask-app
+    team: alpha-1
+spec:
+  type: ClusterIP
+  selector:
+    app: flask-app
+    team: alpha-1
+  ports:
+    - port: 5000
+      name: http
+      targetPort: 5000
