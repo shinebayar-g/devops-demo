@@ -24,7 +24,7 @@ spec:
         app: flask-app
         team: alpha-1
     spec:
-      terminationGracePeriodSeconds: 300
+      terminationGracePeriodSeconds: 60
       containers:
         - name: flask-app
           image: shinebayar/devops-demo-flask:master
