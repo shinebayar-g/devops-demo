@@ -1,0 +1,21 @@
+name: Continuous Deployment
+
+on:
+  schedule:
+    - cron:  '0 */12 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Deploy
+      env:
+        kube_config: ${{ secrets.KUBE_CONFIG }}
+      run: |
+        curl -sLO https://storage.googleapis.com/kubernetes-release/release/v1.16.15/bin/linux/amd64/kubectl
+        chmod +x kubectl
+        echo "$kube_config" | base64 -d > KUBE_CONFIG
+        ./kubectl rollout restart deployment flask-app --kubeconfig KUBE_CONFIG

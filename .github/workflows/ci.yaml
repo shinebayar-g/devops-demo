@@ -7,7 +7,6 @@ on:
     paths:
       - '**'
       - '!**.md'
-      - '!.github/**'
       - '!deploy/**'
   pull_request:
     branches:
@@ -32,18 +31,6 @@ jobs:
         key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
         restore-keys: |
           ${{ runner.os }}-pip-
-
-    # - name: Debug
-    #   run: |
-    #     echo ${GITHUB_RUN_ID}
-    #     echo ${GITHUB_RUN_NUMBER}
-    #     echo ${GITHUB_ACTION}
-    #     echo ${GITHUB_ACTOR}
-    #     echo ${GITHUB_REPOSITORY}
-    #     echo ${GITHUB_EVENT_NAME}
-    #     echo ${GITHUB_WORKSPACE}
-    #     echo ${GITHUB_SHA}
-    #     echo ${GITHUB_REF}
 
     - name: Install dependencies
       run: |
