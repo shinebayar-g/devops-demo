@@ -6,8 +6,9 @@ on:
       - '**'
     paths:
       - 'python/**'
+      - '.github/workflows/flask_ci.yaml'
       - '!**.md'
-      - '!deploy/**'
+      - '!k8s_deployment/**'
   pull_request:
     branches:
       - $default-branch
