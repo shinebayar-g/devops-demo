@@ -27,7 +27,7 @@ spec:
       terminationGracePeriodSeconds: 60
       containers:
         - name: flask-app
-          image: shinebayar/devops-demo-flask:master
+          image: shinebayar/devops-demo:flask-master
           imagePullPolicy: Always
           readinessProbe:
             httpGet:
