@@ -1,11 +1,11 @@
-name: Continuous Development
+name: Continuous Development - Flask app
 
 on:
   push:
     branches:
       - '**'
     paths:
-      - '**'
+      - 'python/**'
       - '!**.md'
       - '!deploy/**'
   pull_request:
@@ -28,23 +28,24 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        key: ${{ runner.os }}-pip-${{ hashFiles('python/**/requirements.txt') }}
         restore-keys: |
           ${{ runner.os }}-pip-
 
     - name: Install dependencies
       run: |
+        cd python
         python -m pip install --upgrade pip
         pip install flake8 pytest
-        cd src
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-    # - name: Lint with flake8
-    #   run: |
-    #     # stop the build if there are Python syntax errors or undefined names
-    #     flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-    #     # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-    #     flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - name: Lint with flake8
+      run: |
+        cd python
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
     # - name: Test with pytest
     #   run: |
@@ -53,6 +54,7 @@ jobs:
     - name: Build docker image
       if: github.event_name == 'push' && ( github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop')
       run: |
+        cd python
         echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-        docker build -t shinebayar/devops-demo-flask:${GITHUB_REF#refs/heads/} -f Dockerfile .
-        docker push shinebayar/devops-demo-flask:${GITHUB_REF#refs/heads/}
+        docker build -t shinebayar/devops-demo:flask-${GITHUB_REF#refs/heads/} -f wsgi.Dockerfile .
+        docker push shinebayar/devops-demo:flask-${GITHUB_REF#refs/heads/}
