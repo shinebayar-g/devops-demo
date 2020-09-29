@@ -1,0 +1,3 @@
+# running dump.py script everyday at 5:00 AM
+# piping script outputs to cron daemon which is available to access by docker logs command
+0 5 * * * root . /app/.env; /usr/local/bin/python /app/dump.py > /proc/1/fd/1 2>/proc/1/fd/2
